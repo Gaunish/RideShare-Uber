@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7_r8nrmu=g7$vw&@8j+_u7a&^aqwtysd4pq#o)6n!m58zhsnm9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vcm-24018.vm.duke.edu']
+ALLOWED_HOSTS = ['web','vcm-24018.vm.duke.edu', 'vcm-24111.vm.duke.edu']
 
 
 # Application definition
@@ -75,12 +75,12 @@ WSGI_APPLICATION = 'hw_1_ride_share.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mydb',
-        'USER': 'myuser',
-        'PASSWORD': 'mypass',
-        'HOST': 'localhost',
-        'PORT': '',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tvpyjisr',
+        'USER': 'tvpyjisr',
+        'PASSWORD': '57bqatHcTRhyMJp5VPL3_8rJWEKNhP1K',
+        'HOST': 'castor.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
