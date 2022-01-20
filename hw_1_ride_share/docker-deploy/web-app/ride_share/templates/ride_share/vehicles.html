@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>View All Vehicles</h1>
+  <body>
+    {% for car in all_vehicles %}
+      <h3> {{ car.color }} {{ car.vehicle_type }} </h1> 
+      <p> Capacity: {{ car.capactity }} </p>
+      <p> Owner: {{ car.owner }} </p>
+    {% endfor %}
+  </body>
+  <!--<h2>Dynamic content</h2>
+  <ul>
+    <li><strong>Books:</strong> {{ num_books }}</li>
+    <li><strong>Copies:</strong> {{ num_instances }}</li>
+    <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
+    <li><strong>Authors:</strong> {{ num_authors }}</li>
+  </ul>-->
+{% endblock %}
