@@ -27,8 +27,10 @@ SECRET_KEY = 'django-insecure-7_r8nrmu=g7$vw&@8j+_u7a&^aqwtysd4pq#o)6n!m58zhsnm9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = ['web','vcm-24018.vm.duke.edu', 'vcm-24111.vm.duke.edu']
 
+CSRF_TRUSTED_ORIGINS = ['http://vcm-24018.vm.duke.edu:8000', 'http://vcm-24111.vm.duke.edu:8000']
 
 # Application definition
 
@@ -39,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'login.apps.LoginConfig',
+    'ride_share.apps.RideShareConfig',
 ]
 
 MIDDLEWARE = [
@@ -123,7 +125,7 @@ USE_I18N = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 #PROJECT_ROOT = os.path.normpath(os.path.dirname(__file__))
 #STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
