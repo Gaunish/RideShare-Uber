@@ -4,7 +4,7 @@ from django.template import loader
 #from .models import Vehicle
 
 # Create your views here.
-
+'''
 #dummy data
 all_rides = [
     {
@@ -24,7 +24,10 @@ all_rides = [
         'status': 'open',
     }
 ]
-
+'''
+def login_user(request):
+    return render(request, 'ride_share/login.html')
+'''
 def index(request):
     return render(request,'index.html')
 
@@ -38,5 +41,9 @@ def rides(request):
     context = {
         'all_vehicles': Vehicle.objects.all()
     }
+<<<<<<< HEAD
     return render(request,'ride_share/vehicle.html', context)
+=======
+    return render(request,'ride_share/vehicles.html', context)
+>>>>>>> a41ebba53a327951db31c11a38767d86123b3942
 '''
