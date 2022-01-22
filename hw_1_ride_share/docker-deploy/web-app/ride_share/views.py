@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from .models import Vehicle
+#from .models import Vehicle
 
 # Create your views here.
 
@@ -34,8 +34,9 @@ def rides(request):
     }
     return render(request,'ride_share/rides.html', context)
 
-def vehicles(request):
+'''def vehicles(request):
     context = {
-        'all_vehicles': Vehicles.objects.all()
+        'all_vehicles': Vehicle.objects.all()
     }
-    return render(request,'ride_share/vehicles.html', context)
+    return render(request,'ride_share/vehicle.html', context)
+'''
