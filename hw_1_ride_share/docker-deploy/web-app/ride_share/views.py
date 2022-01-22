@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
-from .models import Vehicle
+#from .models import Vehicle
 
 # Create your views here.
-
+'''
 #dummy data
 all_rides = [
     {
@@ -24,7 +24,10 @@ all_rides = [
         'status': 'open',
     }
 ]
-
+'''
+def login_user(request):
+    return render(request, 'ride_share/login.html')
+'''
 def index(request):
     return render(request,'index.html')
 
@@ -39,3 +42,4 @@ def vehicles(request):
         'all_vehicles': Vehicles.objects.all()
     }
     return render(request,'ride_share/vehicles.html', context)
+'''

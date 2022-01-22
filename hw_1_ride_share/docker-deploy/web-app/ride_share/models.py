@@ -2,6 +2,13 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+#User class
+class User(models.Model):
+    user_name = models.CharField(max_length = 200, unique = True)
+    email = models.CharField(max_length = 250, unique = True)
+    password = models.CharField(max_length = 200)
+
+'''
 # Create your models here.
 class Vehicle(models.Model):
     #license_plate = models.OneToOneField(User, max_length=7, help_text='Enter license plate', on_delete=models.CASCADE)
@@ -16,3 +23,4 @@ class Vehicle(models.Model):
 
     def __str__(self):
         return self.owner + "'s" + self.license_plate
+'''
