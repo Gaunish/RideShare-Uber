@@ -1,0 +1,11 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>My Vehicles</h1>
+  <body>
+    {% for car in my_vehicle %}
+      <p> {{ car.color }} {{ car.make }} </p>
+      <p> Capacity: {{ car.capacity }} </p>
+    {% endfor %}
+  </body>
+{% endblock %}

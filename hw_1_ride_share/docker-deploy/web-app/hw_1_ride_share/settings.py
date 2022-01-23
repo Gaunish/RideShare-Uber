@@ -35,13 +35,14 @@ CSRF_TRUSTED_ORIGINS = ['http://vcm-24018.vm.duke.edu:8000', 'http://vcm-24111.v
 # Application definition
 
 INSTALLED_APPS = [
+    'ride.apps.RideConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ride_share.apps.RideShareConfig',
+#    'ride_share.apps.RideShareConfig',
 ]
 
 MIDDLEWARE = [
