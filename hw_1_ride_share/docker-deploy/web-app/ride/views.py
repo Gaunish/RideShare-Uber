@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import Login
+from .forms import Login, Register
 
 #dummy data
 all_rides = [
@@ -46,13 +46,16 @@ def login(request):
             #return render(request, 'success.html')
 
             #NOT WORKING
-            return redirect(reverse(rides))
+            return render(request,'index.html') 
     #GET METHOD
     else:
         form = Login()
 
     return render(request, 'auth/login.html', {'form':form})
         
+def register(request):
+    form = Register()
+    return render(request, 'auth/reg.html', {'form':form})    
 
 def rides(request):
     context = {
