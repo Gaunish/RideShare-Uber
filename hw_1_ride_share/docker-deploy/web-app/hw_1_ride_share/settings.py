@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 #    'ride_share.apps.RideShareConfig',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
