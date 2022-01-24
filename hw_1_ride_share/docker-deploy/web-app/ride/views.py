@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Vehicle
+from .models import Vehicle, Ride
 from .forms import Login, Register
 
 #dummy data
@@ -62,7 +62,7 @@ def register(request):
 
 def rides(request):
     context = {
-        'all_rides': all_rides
+        'all_rides': Ride.objects.all()
     }
     return render(request,'ride/rides.html', context)
 

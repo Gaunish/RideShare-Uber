@@ -4,7 +4,7 @@
   <h1>My Vehicle</h1>
   <body>
     {% for car in my_vehicle %}
-      <p> {{ car.owner.user_name }}'s {{ car.make }} </p>
+      <p> {{ car.owner.user_name }}'s Car</p>
       <p><strong>License Plate:</strong> {{ car.license_plate }} </p>
       <p><strong>Capacity:</strong> {{ car.capacity }} </p>
     {% endfor %}
