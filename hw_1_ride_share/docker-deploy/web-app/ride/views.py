@@ -1,29 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Vehicle, Ride
-from .forms import Login, Register
-
-#dummy data
-all_rides = [
-    {
-        'driver': 'Owen',
-        'owner': 'Gaunish',
-        'num_passengers': '4',
-        'vehicle': '2020 Mazda CX-5',
-        'destination': '1234 Memory Lane',
-        'status': 'confirmed',
-        'license_plate': 'ABC123',
-    },
-    {
-        'driver': 'Owen',
-        'owner': 'Grady',
-        'num_passengers': '2',
-        'vehicle': '2020 Mazda CX-5',
-        'destination': '321 Main Street',
-        'status': 'open',
-        'license_plate': 'ZZO081',
-    }
-]
+from .forms import Login, Register, RequestRideForm
+import datetime
+from django.utils import timezone
 
 def index(request):
     return render(request,'index.html')
@@ -48,7 +28,7 @@ def login(request):
 
             #return render(request, 'success.html')
 
-            #NOT WORKING
+            #NOT WORKING - you may need to pass in the context variable
             return render(request,'index.html') 
     #GET METHOD
     else:
@@ -65,6 +45,26 @@ def rides(request):
         'all_rides': Ride.objects.all()
     }
     return render(request,'ride/rides.html', context)
+
+def open_rides(request):
+    context = {
+        'all_rides': Ride.objects.all()
+    }
+    return render(request,'ride/open_rides.html', context)
+
+def request_ride(request):
+    if request.method == 'POST':
+        form = RequestRideForm(request.POST)
+    else:
+        #thirty_mins = timezone.now() + datetime.timedelta(minutes=30)
+        #form = RequestRideForm(initial={'arrival': thirty_mins})
+        form = RequestRideForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request,'ride/request_ride.html', context)
 
 def myVehicle(request):
     context = {
