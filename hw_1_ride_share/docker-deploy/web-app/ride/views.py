@@ -1,24 +1,27 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from .models import Vehicle
 from .forms import Login, Register
 
 #dummy data
 all_rides = [
     {
         'driver': 'Owen',
-        'passenger': 'Gaunish',
-        'party_size': '4',
+        'owner': 'Gaunish',
+        'num_passengers': '4',
         'vehicle': '2020 Mazda CX-5',
         'destination': '1234 Memory Lane',
         'status': 'confirmed',
+        'license_plate': 'ABC123',
     },
     {
         'driver': 'Owen',
-        'passenger': 'Grady',
-        'party_size': '2',
+        'owner': 'Grady',
+        'num_passengers': '2',
         'vehicle': '2020 Mazda CX-5',
         'destination': '321 Main Street',
         'status': 'open',
+        'license_plate': 'ZZO081',
     }
 ]
 
@@ -63,17 +66,8 @@ def rides(request):
     }
     return render(request,'ride/rides.html', context)
 
-#dummy data
-my_vehicle = [
-    {
-        'make': '2020 Mazda CX-5',
-        'color': 'Blue',
-        'capacity': '4',
-    }
-]
-
 def myVehicle(request):
     context = {
-        'my_vehicle': my_vehicle
+        'my_vehicle': Vehicle.objects.all()
     }
     return render(request,'ride/vehicle.html', context)

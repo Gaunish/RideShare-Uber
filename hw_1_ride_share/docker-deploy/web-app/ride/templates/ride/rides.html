@@ -4,17 +4,10 @@
   <h1>View All Rides</h1>
   <body>
     {% for ride in all_rides %}
-      <h3> {{ ride.passenger }}'s Ride (Party of {{ ride.party_size }}) </h1>
-      <p> Destination: {{ ride.destination }} </p>
-      <p> Trip Status: {{ ride.status }} </p>
-      <p> Look for {{ ride.driver }} driving a {{ ride.vehicle }} </p>
+      <h3>{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }}) </h1>
+      <p><strong>Destination:</strong> {{ ride.destination }} </p>
+      <p><strong>Trip Status:</strong> {{ ride.status }} </p>
+      <p>Look for {{ ride.driver }} driving a {{ ride.vehicle }} with the license plate {{ ride.license_plate }} </p>
     {% endfor %}
   </body>
-  <!--<h2>Dynamic content</h2>
-  <ul>
-    <li><strong>Books:</strong> {{ num_books }}</li>
-    <li><strong>Copies:</strong> {{ num_instances }}</li>
-    <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
-    <li><strong>Authors:</strong> {{ num_authors }}</li>
-  </ul>-->
 {% endblock %}
