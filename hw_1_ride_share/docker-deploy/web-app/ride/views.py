@@ -4,6 +4,7 @@ from .models import Vehicle, Ride
 from .forms import Login, Register, RequestRideForm
 import datetime
 from django.utils import timezone
+from django.views.generic import ListView, DetailView, CreateView
 
 def index(request):
     return render(request,'index.html')
@@ -40,11 +41,33 @@ def register(request):
     form = Register()
     return render(request, 'auth/reg.html', {'form':form})    
 
-def rides(request):
+
+class RideListView(ListView):
+    model = Ride
+    template_name = 'ride/rides.html'
+    context_object_name = 'all_rides'
+    ordering = ['-arrival']
+
+class RideDetailView(DetailView):
+    model = Ride
+    context_object_name = 'this_ride'
+
+class RideCreateView(CreateView):
+    model = Ride
+    #context_object_name = 'new_ride'
+    fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
+    
+    #needs login / registration to be working to work
+    #def form_valid(self, form):
+    #    form.instance.owner = self.request.user
+    #    return super().form_valid(form)
+
+#overrided by RideListView - same functionality
+'''def rides(request):
     context = {
         'all_rides': Ride.objects.all()
     }
-    return render(request,'ride/rides.html', context)
+    return render(request,'ride/rides.html', context)'''
 
 def open_rides(request):
     context = {

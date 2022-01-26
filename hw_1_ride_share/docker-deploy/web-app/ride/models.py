@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.utils import timezone
+from django.urls import reverse
 
 class User(models.Model):
     user = 'U'
@@ -64,6 +65,10 @@ class Ride(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f"{self.owner}'s Trip to {self.destination}"
+
+    def get_absolute_url(self):
+        """Returns the url to access a detail record for this ride."""
+        return reverse('ride-detail', args=[str(self.id)])
         
     #@property
     #def driver(self):
