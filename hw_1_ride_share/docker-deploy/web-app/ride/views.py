@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Vehicle, Ride
+from .models import User, Vehicle, Ride
 from .forms import Login, Register, RequestRideForm
 import datetime
 from django.utils import timezone
@@ -23,14 +23,12 @@ def login(request):
             user_type = form.cleaned_data['user_type']
 
             #sql query
-            user = Login.objects.get(user_name = name, email = email, user_type = user_type)
-            #if user.password != hash(password):
-                #return render(request, 'error.html')
-
-            #return render(request, 'success.html')
-
-            #NOT WORKING - you may need to pass in the context variable
-            return render(request,'index.html') 
+            try:
+                user = User.objects.get(user_name = name, email = email, user_type = user_type)
+            except:
+                return redirect('login')
+            
+            return redirect('rides')
     #GET METHOD
     else:
         form = Login()
@@ -38,7 +36,23 @@ def login(request):
     return render(request, 'auth/login.html', {'form':form})
         
 def register(request):
-    form = Register()
+    if request.method == 'POST':
+        form = Register(request.POST)
+        if form.is_valid():        
+            #get data entered by user
+            name = form.cleaned_data['user_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user_type = form.cleaned_data['user_type']
+
+
+            #sql query
+            user = User(user_name = name, email = email, password = password, user_type = user_type)
+            user.save()
+            
+            return redirect('login')
+    else:
+        form = Register()
     return render(request, 'auth/reg.html', {'form':form})    
 
 
