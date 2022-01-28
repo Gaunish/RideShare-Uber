@@ -14,5 +14,5 @@ urlpatterns = [
     path('vehicle/', views.myVehicle, name='vehicle'),
     path('vehicle/new/', VehicleCreateView.as_view(), name='vehicle-create'),
     path('open_rides/', views.open_rides, name='open_rides'),
-    #path('request_ride/', views.request_ride, name='request_ride'),
+    path('request_ride/', views.request_ride, name='request_ride'),
 ]

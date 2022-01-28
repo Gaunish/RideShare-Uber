@@ -99,9 +99,20 @@ class RideCreateView(CreateView):
     model = Ride
     #context_object_name = 'new_ride'
     fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
+
     def form_valid(self, form):
-        form.instance.owner = self.request.user
+        #form.instance.owner = self.request.user
+        user_row = self.request.session.get('id', "None")
+        if user_row != "None":
+            user = User.objects.get(id = request.session['id'])
+        print (user)
+        form.instance.owner = user
         return super().form_valid(form)
+    '''def get_initial(self):
+        return {
+             'owner': self.request.user,
+             'destination': datetime.date.today()
+        }'''
 
 class VehicleCreateView(CreateView):
     model = Vehicle
@@ -130,6 +141,7 @@ def open_rides(request):
 def request_ride(request):
     if request.method == 'POST':
         form = RequestRideForm(request.POST)
+        return redirect('rides')
         
     else:
         #thirty_mins = timezone.now() + datetime.timedelta(minutes=30)
@@ -138,10 +150,12 @@ def request_ride(request):
 
 
     
-    user = User.objects.get(id = request.session['id'])
+    user_row = request.session.get('id', "None")
+    if user_row != "None":
+        user = User.objects.get(id = request.session['id'])
     context = {
         "form": form,
-        "name": "1234",
+        "name": user,
     }
 
     return render(request,'ride/request_ride.html', context)
