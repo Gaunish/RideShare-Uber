@@ -16,18 +16,10 @@
       {% block sidebar %}
         <ul class="sidebar-nav">
           <li><a href="{% url 'index' %}">Home</a></li>
-<<<<<<< HEAD
-          <!--<li><a href="url open_rides">Search Open Rides</a></li> -->
-=======
-          <li><a href="{% url 'open_rides' %}">Search Open Rides</a></li>
-          <li><a href="{% url 'request_ride' %}">Request Ride</a></li>
->>>>>>> 1671cb5deed4aa77aa2e913426befc043365de36
-        </ul>
+          </ul>
         <ul class="sidebar-nav">
           <li><a href="{% url 'login' %}">Login</a></li>
-          <li><a href="{% url 'register' %}">Register</a></li>
-          <li><a href="{% url 'rides' %}">My Rides</a></li>
-          <li><a href="{% url 'vehicle' %}">My Vehicle</a></li>
+          <li><a href="{% url 'register' %}">Register</a></li> 
         </ul>
       {% endblock %}
       </div>
