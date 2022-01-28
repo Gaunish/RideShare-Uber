@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import User, Vehicle, Ride
-from .forms import Login, Register, RequestRide
+from .forms import Login, Register, RequestRideForm
 import datetime
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView
@@ -151,13 +151,13 @@ def request_ride(request):
         user = user_r.user_name
 
     if request.method == 'POST':
-        form = RequestRide(request.POST)
+        form = RequestRideForm(request.POST)
         return redirect('rides')
         
     else:
         #thirty_mins = timezone.now() + datetime.timedelta(minutes=30)
         #form = RequestRideForm(initial={'arrival': thirty_mins})
-        form = RequestRide()
+        form = RequestRideForm()
 
     context = {
         "form": form,
