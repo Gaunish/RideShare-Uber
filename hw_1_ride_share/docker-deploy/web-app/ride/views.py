@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import User, Vehicle, Ride
-from .forms import Login, Register, RequestRideForm
+from .forms import Login, Register, RequestRide
 import datetime
 from django.utils import timezone
-from django.views.generic import ListView, DetailView, CreateView
+#from django.views.generic import ListView, DetailView, CreateView
 
 
 def index(request):
@@ -35,7 +35,7 @@ def login(request):
                return redirect('login')
 
             request.session['id'] = user.id;
-            return redirect('ride-create')
+            return redirect('request_ride')
     #GET METHOD
     else:
         form = Login()
@@ -85,6 +85,7 @@ def register(request):
     return render(request, 'auth/reg.html', context)    
 
 
+'''
 class RideListView(ListView):
     model = Ride
     template_name = 'ride/rides.html'
@@ -108,11 +109,11 @@ class RideCreateView(CreateView):
         print (user)
         form.instance.owner = user
         return super().form_valid(form)
-    '''def get_initial(self):
+    def get_initial(self):
         return {
              'owner': self.request.user,
              'destination': datetime.date.today()
-        }'''
+        }
 
 class VehicleCreateView(CreateView):
     model = Vehicle
@@ -123,12 +124,16 @@ class VehicleCreateView(CreateView):
         return super().form_valid(form)
 
 #overrided by RideListView - same functionality
-'''def rides(request):
+'''
+
+'''
+def rides(request):
     context = {
         'all_rides': Ride.objects.all()
     }
-    return render(request,'ride/rides.html', context)'''
-
+    return render(request,'ride/rides.html', context)
+'''
+'''
 def open_rides(request):
     if request.method == 'GET':
         context = {
@@ -137,22 +142,25 @@ def open_rides(request):
     else:
         context = None  
     return render(request,'ride/open_rides.html', context)
+'''
 
 def request_ride(request):
     if request.method == 'POST':
-        form = RequestRideForm(request.POST)
+        form = RequestRide(request.POST)
         return redirect('rides')
         
     else:
         #thirty_mins = timezone.now() + datetime.timedelta(minutes=30)
         #form = RequestRideForm(initial={'arrival': thirty_mins})
-        form = RequestRideForm()
+        form = RequestRide()
 
 
-    
+    user = "None"
     user_row = request.session.get('id', "None")
     if user_row != "None":
-        user = User.objects.get(id = request.session['id'])
+        user_r = User.objects.get(id = request.session['id'])
+        user = user_r.user_name
+        
     context = {
         "form": form,
         "name": user,
@@ -160,8 +168,10 @@ def request_ride(request):
 
     return render(request,'ride/request_ride.html', context)
 
+'''
 def myVehicle(request):
     context = {
         'my_vehicle': Vehicle.objects.all()
     }
     return render(request,'ride/vehicle.html', context)
+'''
