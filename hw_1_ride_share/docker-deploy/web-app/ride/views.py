@@ -135,6 +135,7 @@ class RideListView(ListView):
 
 class RideDetailView(DetailView):
     model = Ride
+    template_name = 'user/ride_detail.html'
     context_object_name = 'this_ride'
 '''
 class RideCreateView(CreateView):
@@ -185,7 +186,6 @@ def open_rides(request):
 
 
 def request_ride(request):
-<<<<<<< HEAD
     #check if user is logged in
     user = login_required(request)
     if user == False:
@@ -202,9 +202,7 @@ def request_ride(request):
     if user_row != "None":
         user_r = User.objects.get(id = request.session['id'])
         user = user_r.user_name
-=======
     user = User.objects.get(id = request.session['id'])
->>>>>>> 6d860299601862bd2c9b0f3c71d3d00e56bd0d74
 
     if request.method == 'POST':
         form = RequestRideForm(request.POST)
