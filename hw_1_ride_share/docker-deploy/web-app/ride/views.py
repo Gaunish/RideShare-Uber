@@ -71,10 +71,9 @@ class RideCreateView(CreateView):
     #context_object_name = 'new_ride'
     fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
     
-    #needs login / registration to be working to work
-    #def form_valid(self, form):
-    #    form.instance.owner = self.request.user
-    #    return super().form_valid(form)
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 #overrided by RideListView - same functionality
 '''def rides(request):
@@ -84,9 +83,12 @@ class RideCreateView(CreateView):
     return render(request,'ride/rides.html', context)'''
 
 def open_rides(request):
-    context = {
-        'all_rides': Ride.objects.all()
-    }
+    if request.method == 'GET':
+        context = {
+            'open_rides': Ride.objects.filter(shareable = True, status = 'o')
+        }
+    else:
+        context = None  
     return render(request,'ride/open_rides.html', context)
 
 def request_ride(request):
