@@ -75,6 +75,14 @@ class RideCreateView(CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
+class VehicleCreateView(CreateView):
+    model = Vehicle
+    fields = ['vehicle_type', 'capacity', 'license_plate']
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
 #overrided by RideListView - same functionality
 '''def rides(request):
     context = {
