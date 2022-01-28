@@ -23,7 +23,7 @@ def login_required(request):
    
    return True
 
-#function to check whether user is logged in
+#function to check whether user type is correct
 def check_user(request):
     user = User.objects.get(id = request.session['id'])
     if user.user_type != 'U':
@@ -129,7 +129,7 @@ def user_home(request):
 
 class RideListView(ListView):
     model = Ride
-    template_name = 'ride/rides.html'
+    template_name = 'user/rides.html'
     context_object_name = 'all_rides'
     ordering = ['-arrival']
 
@@ -172,7 +172,7 @@ def rides(request):
     context = {
         'all_rides': Ride.objects.all()
     }
-    return render(request,'ride/rides.html', context)
+    return render(request,'user/rides.html', context)
 
 def open_rides(request):
     if request.method == 'GET':
@@ -181,10 +181,21 @@ def open_rides(request):
         }
     else:
         context = None  
-    return render(request,'ride/open_rides.html', context)
+    return render(request,'user/open_rides.html', context)
 
 
 def request_ride(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type
+    if check_user(request) == False:
+        return redirect('login')
+
+    #user = User.objects.get(id = request.session['id'])
+    
     user = "None"
     user_row = request.session.get('id', "None")
     if user_row != "None":

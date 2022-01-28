@@ -1,3 +1,7 @@
 Danger Log - Homework 1 Ride Share
 Gaunish Garg - gg147
 Owen Gibson - ogg4
+
+1) A user may get to driver ride search page and mess up the implemented code for driver and vice versa
+
+2) A ride sharer may edit the shared ride causing errors
