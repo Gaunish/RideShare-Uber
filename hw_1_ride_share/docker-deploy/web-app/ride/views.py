@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import User, Vehicle, Ride
-from .forms import Login, Register, RequestRideForm
+from .forms import Login, Register, RequestRideForm, Register_driver
 import datetime
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView
@@ -100,6 +100,12 @@ def register(request):
             except:
                 #To implement : error message to be shown, password hash
                 redirect('register')
+
+            #if driver, register vehicle
+            if user_type == 'D':
+                user = User.objects.get(user_name = name)
+                request.session['id'] = user.id;
+                return redirect('reg_vehicle')
             
             return redirect('login')
     #Get method
@@ -111,6 +117,48 @@ def register(request):
     }
     return render(request, 'auth/reg.html', context)    
 
+#Route for registering vehicle
+def reg_vehicle(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    if request.method == 'POST':
+        form = Register_driver(request.POST)
+        if form.is_valid():
+            
+            #get cleansed data entered by user
+            veh_type = form.cleaned_data['vehicle_type']
+            plate = form.cleaned_data['license_plate']
+            cap = form.cleaned_data['capacity']
+            driver = User.objects.get(id = request.session['id'])
+
+            #sql query to register user in table user
+            try:
+                vehicle = Vehicle(vehicle_type = veh_type, license_plate = plate, capacity = cap, owner = driver)
+                vehicle.save()
+            except:
+                #delete record from user
+                driver.delete()
+                
+                #To implement : error message to be shown
+                redirect('register')
+            
+            return redirect('login')
+    #Get method
+    else:
+        form = Register_driver()
+    
+    context = {
+        'form' : form,
+    }
+    return render(request, 'ride/vehicle_form.html', context)    
+
 #Route for user home
 def user_home(request):
     #check if user is logged in
@@ -118,10 +166,11 @@ def user_home(request):
     if user == False:
         return redirect('login')
 
-    #check user type
+    #check user type is user
     if check_user(request) == False:
         return redirect('login')
 
+    #sql query to get user
     user = User.objects.get(id = request.session['id'])
     
     return render(request, 'user/home.html', {'name' : user.user_name})
@@ -185,7 +234,7 @@ def open_rides(request):
 
 
 def request_ride(request):
-<<<<<<< HEAD
+#<<<<<<< HEAD
     #check if user is logged in
     user = login_required(request)
     if user == False:
@@ -202,9 +251,9 @@ def request_ride(request):
     if user_row != "None":
         user_r = User.objects.get(id = request.session['id'])
         user = user_r.user_name
-=======
+#=======
     user = User.objects.get(id = request.session['id'])
->>>>>>> 6d860299601862bd2c9b0f3c71d3d00e56bd0d74
+#>>>>>>> 6d860299601862bd2c9b0f3c71d3d00e56bd0d74
 
     if request.method == 'POST':
         form = RequestRideForm(request.POST)

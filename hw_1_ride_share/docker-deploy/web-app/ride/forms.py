@@ -2,7 +2,7 @@ from django import forms
 from django.utils import timezone
 from django.forms import ModelForm
 
-from .models import Ride
+from .models import Ride, Vehicle
 
 #Choices for uaer type
 user = 'U' 
@@ -27,6 +27,11 @@ VEHICLE_TYPE = (
         ('s', 'Small'),
         ('l', 'Large'),
 )
+
+class Register_driver(ModelForm):
+    class Meta:
+        model = Vehicle
+        fields = ['vehicle_type', 'license_plate', 'capacity'] 
 
 class RequestRideForm(ModelForm):
     #vehicle = forms.ChoiceField(choices=VEHICLE_TYPE)
