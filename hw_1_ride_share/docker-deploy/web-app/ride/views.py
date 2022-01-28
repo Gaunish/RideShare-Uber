@@ -144,14 +144,24 @@ def open_rides(request):
 
 
 def request_ride(request):
-    user = "None"
-    user_row = request.session.get('id', "None")
-    if user_row != "None":
-        user_r = User.objects.get(id = request.session['id'])
-        user = user_r.user_name
+    user = User.objects.get(id = request.session['id'])
 
     if request.method == 'POST':
         form = RequestRideForm(request.POST)
+
+        if form.is_valid():
+            arrival = form.cleaned_data['arrival']
+            destination = form.cleaned_data['destination']
+            num_passengers = form.cleaned_data['num_passengers']
+            shareable = form.cleaned_data['shareable']
+            vehicle = form.cleaned_data['vehicle']
+
+            #sql query
+            try:
+                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, destination = destination, shareable = shareable)
+                this_ride.save()
+            except:
+                redirect('request_ride')
         return redirect('rides')
         
     else:
