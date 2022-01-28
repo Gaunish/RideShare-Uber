@@ -4,7 +4,7 @@ from .models import User, Vehicle, Ride
 from .forms import Login, Register, RequestRide
 import datetime
 from django.utils import timezone
-#from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView
 
 
 def index(request):
@@ -85,7 +85,7 @@ def register(request):
     return render(request, 'auth/reg.html', context)    
 
 
-'''
+
 class RideListView(ListView):
     model = Ride
     template_name = 'ride/rides.html'
@@ -95,7 +95,7 @@ class RideListView(ListView):
 class RideDetailView(DetailView):
     model = Ride
     context_object_name = 'this_ride'
-
+'''
 class RideCreateView(CreateView):
     model = Ride
     #context_object_name = 'new_ride'
@@ -126,14 +126,13 @@ class VehicleCreateView(CreateView):
 #overrided by RideListView - same functionality
 '''
 
-'''
+
 def rides(request):
     context = {
         'all_rides': Ride.objects.all()
     }
     return render(request,'ride/rides.html', context)
-'''
-'''
+
 def open_rides(request):
     if request.method == 'GET':
         context = {
@@ -142,9 +141,15 @@ def open_rides(request):
     else:
         context = None  
     return render(request,'ride/open_rides.html', context)
-'''
+
 
 def request_ride(request):
+    user = "None"
+    user_row = request.session.get('id', "None")
+    if user_row != "None":
+        user_r = User.objects.get(id = request.session['id'])
+        user = user_r.user_name
+
     if request.method == 'POST':
         form = RequestRide(request.POST)
         return redirect('rides')
@@ -154,13 +159,6 @@ def request_ride(request):
         #form = RequestRideForm(initial={'arrival': thirty_mins})
         form = RequestRide()
 
-
-    user = "None"
-    user_row = request.session.get('id', "None")
-    if user_row != "None":
-        user_r = User.objects.get(id = request.session['id'])
-        user = user_r.user_name
-        
     context = {
         "form": form,
         "name": user,
@@ -168,10 +166,10 @@ def request_ride(request):
 
     return render(request,'ride/request_ride.html', context)
 
-'''
+
 def myVehicle(request):
     context = {
         'my_vehicle': Vehicle.objects.all()
     }
     return render(request,'ride/vehicle.html', context)
-'''
+
