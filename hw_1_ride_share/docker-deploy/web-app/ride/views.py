@@ -8,8 +8,29 @@ from django.utils import timezone
 
 
 def index(request):
+    user = login_required(request)
+    if user == True:
+        return redirect('user_home')
+    
     return render(request,'index.html')
 
+#function to check whether user is logged in
+def login_required(request):
+   user = request.session.get('id', "None")
+
+   if user == "None":
+       return False
+   
+   return True
+
+#function to check whether user is logged in
+def check_user(request):
+    user = User.objects.get(id = request.session['id'])
+    if user.user_type != 'U':
+        return False
+    return True
+
+#route for common login 
 def login(request):
     #POST METHOD
     if request.method == 'POST':
@@ -20,13 +41,11 @@ def login(request):
         if form.is_valid():
             #get data entered by user
             name = form.cleaned_data['user_name']
-            email = form.cleaned_data['email']
             password = form.cleaned_data['password']
-            user_type = form.cleaned_data['user_type']
 
             #sql query to verify records
             try:
-                user = User.objects.get(user_name = name, email = email, user_type = user_type)
+                user = User.objects.get(user_name = name)
             except:
                 return redirect('login')
 
@@ -35,55 +54,77 @@ def login(request):
                return redirect('login')
 
             request.session['id'] = user.id;
-            return redirect('request_ride')
+            return redirect('user_home')
     #GET METHOD
     else:
         form = Login()
 
     return render(request, 'auth/login.html', {'form':form})
 
+
+#route for logout 
 def logout(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #clear the session
     del request.session['id']
     return redirect('login')
 
+
+#Route to register the user
 def register(request):
+    #Post method
     if request.method == 'POST':
+        #check validity of data
         form = Register(request.POST)
         if form.is_valid():
             
-            #get data entered by user
+            #get cleansed data entered by user
             name = form.cleaned_data['user_name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             re_password = form.cleaned_data['re_passwd']
             user_type = form.cleaned_data['user_type']
 
+            #check if password match
             if password != re_password:
                 redirect('register')
 
-            #sql query
+            #sql query to register user in table user
             try:
                 user = User(user_name = name, email = email, password = password, user_type = user_type)
                 user.save()
             except:
+                #To implement : error message to be shown, password hash
                 redirect('register')
             
             return redirect('login')
+    #Get method
     else:
         form = Register()
-
-    name = "None"
-    user_row = request.session.get('id', "None")
-    if user_row != "None":
-        user = User.objects.get(id = request.session['id'])
-        name = user.user_name
-        
+    
     context = {
         'form' : form,
-        'name' : name,
     }
     return render(request, 'auth/reg.html', context)    
 
+#Route for user home
+def user_home(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type
+    if check_user(request) == False:
+        return redirect('login')
+
+    user = User.objects.get(id = request.session['id'])
+    
+    return render(request, 'user/home.html', {'name' : user.user_name})
 
 '''
 class RideListView(ListView):
@@ -166,7 +207,7 @@ def request_ride(request):
         "name": user,
     }
 
-    return render(request,'ride/request_ride.html', context)
+    return render(request,'user/request_ride.html', context)
 
 '''
 def myVehicle(request):

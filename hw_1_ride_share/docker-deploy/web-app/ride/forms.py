@@ -4,16 +4,17 @@ from django.forms import ModelForm
 
 from .models import Ride
 
+#Choices for uaer type
 user = 'U' 
 driver = 'D'
 USER_CHOICES = [(user, 'User'), (driver, 'Driver')] 
 
+#Form for user login
 class Login(forms.Form):
     user_name = forms.CharField(label='Username', max_length = 200)
-    email = forms.EmailField(label = 'Email', max_length = 250)
     password = forms.CharField(max_length = 200)
-    user_type = forms.ChoiceField(label = 'User Type', choices=USER_CHOICES)
 
+#Form for user register
 class Register(forms.Form):
     user_name = forms.CharField(label='Username', max_length = 200)
     email = forms.EmailField(label = 'Email', max_length = 250) 
@@ -21,6 +22,7 @@ class Register(forms.Form):
     re_passwd = forms.CharField(label = 'Repeat Password', max_length = 200)
     user_type = forms.ChoiceField(label = 'User Type', choices=USER_CHOICES)
 
+    
 VEHICLE_TYPE = (
         ('s', 'Small'),
         ('l', 'Large'),
