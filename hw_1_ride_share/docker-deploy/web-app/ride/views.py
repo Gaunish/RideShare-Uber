@@ -230,15 +230,23 @@ def open_rides(request):
             'open_rides': Ride.objects.filter(shareable = True, status = 'o')
         }
     else:
+        user = User.objects.get(id = request.session['id'])
+        this_ride = request.POST.copy()
+        this_ride['sharer'] = user
+        request.POST = this_ride
+        
         context = None  
     return render(request,'user/open_rides.html', context)
 
 
 def request_ride(request):
+<<<<<<< HEAD
 #<<<<<<< HEAD
 #<<<<<<< HEAD
 #=======
 #>>>>>>> b23f1160da5254b1dcd709ec3b7025f2469abe88
+=======
+>>>>>>> a7f1e3992eb06b64914470619cb89538f09e9b0a
     #check if user is logged in
     user = login_required(request)
     if user == False:
@@ -255,6 +263,7 @@ def request_ride(request):
     if user_row != "None":
         user_r = User.objects.get(id = request.session['id'])
         user = user_r.user_name
+<<<<<<< HEAD
 #<<<<<<< HEAD
 #=======
     user = User.objects.get(id = request.session['id'])
@@ -262,6 +271,9 @@ def request_ride(request):
 #=======
     user = User.objects.get(id = request.session['id'])
 #>>>>>>> b23f1160da5254b1dcd709ec3b7025f2469abe88
+=======
+    user = User.objects.get(id = request.session['id'])
+>>>>>>> a7f1e3992eb06b64914470619cb89538f09e9b0a
 
     if request.method == 'POST':
         form = RequestRideForm(request.POST)
