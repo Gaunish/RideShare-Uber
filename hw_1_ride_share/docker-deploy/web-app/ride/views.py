@@ -182,6 +182,10 @@ class RideListView(ListView):
     context_object_name = 'all_rides'
     ordering = ['-arrival']
 
+    def get_queryset(self):
+        user = User.objects.get(id = request.session['id'])
+        return Ride.objects.filter(owner = user)
+
 class RideDetailView(DetailView):
     model = Ride
     template_name = 'user/ride_detail.html'
@@ -219,8 +223,9 @@ class VehicleCreateView(CreateView):
 
 
 def rides(request):
+    user = User.objects.get(id = request.session['id'])
     context = {
-        'all_rides': Ride.objects.all()
+        'all_rides': Ride.objects.filter(owner = user)
     }
     return render(request,'user/rides.html', context)
 
@@ -231,9 +236,10 @@ def open_rides(request):
         }
     else:
         user = User.objects.get(id = request.session['id'])
-        this_ride = request.POST.copy()
-        this_ride['sharer'] = user
-        request.POST = this_ride
+        form = RequestRideForm(request.POST)
+        if form.is_valid():
+            form.sharer = user
+            form.save()
         
         context = None  
     return render(request,'user/open_rides.html', context)
@@ -249,16 +255,17 @@ def request_ride(request):
     if check_user(request) == False:
         return redirect('login')
 
-    #user = User.objects.get(id = request.session['id'])
-    
     user = "None"
     user_row = request.session.get('id', "None")
     if user_row != "None":
         user_r = User.objects.get(id = request.session['id'])
         user = user_r.user_name
+<<<<<<< HEAD
 
     user = User.objects.get(id = request.session['id'])
     user = User.objects.get(id = request.session['id'])
+=======
+>>>>>>> 70214ee21acbe34b2da1e9a851bf213bb75d5331
     user = User.objects.get(id = request.session['id'])
 
     if request.method == 'POST':
