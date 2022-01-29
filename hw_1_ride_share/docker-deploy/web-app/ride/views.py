@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import User, Vehicle, Ride
-from .forms import Login, Register, RequestRideForm, Register_driver
-import datetime
+from .forms import Login, Register, RequestRideForm, Register_driver, RequestRideShare
+from datetime import datetime
 from django.utils import timezone
 from django.views.generic import ListView, DetailView, CreateView
 
@@ -230,18 +230,49 @@ def rides(request):
     return render(request,'user/rides.html', context)
 
 def open_rides(request):
-    if request.method == 'GET':
-        context = {
-            'open_rides': Ride.objects.filter(shareable = True, status = 'o')
-        }
-    else:
-        user = User.objects.get(id = request.session['id'])
-        form = RequestRideForm(request.POST)
+     #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is user
+    if check_user(request) == False:
+        return redirect('login')
+
+    
+    if request.method == 'POST':
+        form = RequestRideShare(request.POST)
         if form.is_valid():
-            form.sharer = user
-            form.save()
+
+            #get user data
+            dest = form.cleaned_data['dest']
+            start_arr = form.cleaned_data['start_arr']
+            end_arr = form.cleaned_data['end_arr']
+            num = form.cleaned_data['num_passengers']
+
+            #verify input data
+            if start_arr < datetime.now() || end_arr < datetime.now():
+                return redirect('open_rides')
+            if num_passengers < 1:
+                return redirect('open_rides')
+
+            #sql query
+            try:
+                search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'f', capacity__gte = num, shareable = True)
+            except:
+                return redirect('open_rides')
+
+            
+            return render(request, 'user/select_rides.html', {'rides' : search})
+
+    # Get view
+    else:
+        form = RequestRideShare()
+
+    context = {
+        'form' : form
+    }
         
-        context = None  
     return render(request,'user/open_rides.html', context)
 
 
@@ -260,12 +291,7 @@ def request_ride(request):
     if user_row != "None":
         user_r = User.objects.get(id = request.session['id'])
         user = user_r.user_name
-<<<<<<< HEAD
 
-    user = User.objects.get(id = request.session['id'])
-    user = User.objects.get(id = request.session['id'])
-=======
->>>>>>> 70214ee21acbe34b2da1e9a851bf213bb75d5331
     user = User.objects.get(id = request.session['id'])
 
     if request.method == 'POST':

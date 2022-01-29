@@ -41,6 +41,7 @@ class Ride(models.Model):
     vehicle = models.CharField(max_length=20, choices=VEHICLE_TYPE, default='s')
     arrival = models.DateTimeField(default=timezone.now)
     num_passengers = models.PositiveIntegerField(default=1)
+    capacity = models.PositiveIntegerField()
     destination = models.CharField(max_length=200, help_text='What is your destination?')
     shareable = models.BooleanField(default=False)
     sharer = models.ManyToManyField(User, default=None, blank=True, related_name='ride_sharer')

@@ -1,7 +1,8 @@
 from django import forms
 from django.utils import timezone
 from django.forms import ModelForm
-
+from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import datetime
 from .models import Ride, Vehicle
 
 #Choices for uaer type
@@ -51,3 +52,12 @@ class RequestRideForm(ModelForm):
     class Meta:
         model = Ride
         fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
+
+
+class RequestRideShare(forms.Form):
+    dest = forms.CharField(label='Dest', max_length = 200)
+    start_arr = forms.DateTimeField(initial = datetime.now, label = 'start', input_formats=['%d/%m/%Y %H:%M'],
+       widget = forms.DateTimeInput(format ='%d/%m/%Y %H:%M'))
+    end_arr = forms.DateTimeField(initial = datetime.now, label = 'end', input_formats=['%d/%m/%Y %H:%M'],
+       widget = forms.DateTimeInput(format ='%d/%m/%Y %H:%M'))
+    num_passengers = forms.IntegerField(initial = 1, label = 'num')
