@@ -331,8 +331,9 @@ def request_ride(request):
 
 
 def myVehicle(request):
+    user = User.objects.get(id = request.session['id'])
     context = {
-        'my_vehicle': Vehicle.objects.all()
+        'my_vehicle': Vehicle.objects.filter(owner = user)
     }
     return render(request,'ride/vehicle.html', context)
 
