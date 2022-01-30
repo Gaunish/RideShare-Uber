@@ -258,12 +258,12 @@ def open_rides(request):
 
             #sql query
             try:
-                search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'f', capacity_remaining__gte = num, shareable = True)
+                search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'o', capacity_remaining__gte = num, shareable = True)
             except:
                 return redirect('open_rides')
 
             
-            return render(request, 'user/join_ride.html', {'open_rides' : search})
+            return render(request, 'user/join_ride.html', {'open_ride' : search})
 
     # Get view
     else:
