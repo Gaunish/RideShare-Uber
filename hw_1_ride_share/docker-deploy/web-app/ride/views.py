@@ -251,7 +251,7 @@ def open_rides(request):
             num = form.cleaned_data['num_passengers']
 
             #verify input data
-            if start_arr < datetime.now() || end_arr < datetime.now():
+            if start_arr < datetime.now() or end_arr < datetime.now():
                 return redirect('open_rides')
             if num_passengers < 1:
                 return redirect('open_rides')

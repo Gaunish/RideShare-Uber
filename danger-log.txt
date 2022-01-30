@@ -2,6 +2,12 @@ Danger Log - Homework 1 Ride Share
 Gaunish Garg - gg147
 Owen Gibson - ogg4
 
-1) A user may get to driver ride search page and mess up the implemented code for driver and vice versa
+1) A user may navigate to driver ride search page and mess up the implemented code for driver and vice versa.
 
-2) A ride sharer may edit the shared ride causing errors
+2) A ride sharer may edit the shared ride causing errors.
+
+3) We were having troubles hashing passwords so if our database information has hacked, user passwords may be easily exposed/leaked.
+
+4) If a User knows the format of the urls they can search a specific Ride using the primary key, this is similar for knowing the url for a specific Vehicle.
+
+5) 
