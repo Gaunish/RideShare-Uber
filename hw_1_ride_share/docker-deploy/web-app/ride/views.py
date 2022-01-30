@@ -303,10 +303,15 @@ def request_ride(request):
             num_passengers = form.cleaned_data['num_passengers']
             shareable = form.cleaned_data['shareable']
             vehicle = form.cleaned_data['vehicle']
+            
+            if vehicle == 's':
+                capacity = 4
+            else:
+                capacity = 6
 
             #sql query
             try:
-                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, destination = destination, shareable = shareable)
+                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity = capacity - num_passengers, destination = destination, shareable = shareable)
                 this_ride.save()
             except:
                 redirect('request_ride')
