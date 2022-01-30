@@ -253,17 +253,17 @@ def open_rides(request):
             #verify input data
             if start_arr < datetime.now() or end_arr < datetime.now():
                 return redirect('open_rides')
-            if num_passengers < 1:
+            if num < 1:
                 return redirect('open_rides')
 
             #sql query
             try:
-                search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'f', capacity__gte = num, shareable = True)
+                search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'f', capacity_remaining__gte = num, shareable = True)
             except:
                 return redirect('open_rides')
 
             
-            return render(request, 'user/select_rides.html', {'rides' : search})
+            return render(request, 'user/join_ride.html', {'open_rides' : search})
 
     # Get view
     else:
@@ -311,7 +311,7 @@ def request_ride(request):
 
             #sql query
             try:
-                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity = capacity - num_passengers, destination = destination, shareable = shareable)
+                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity_remaining = capacity - num_passengers, destination = destination, shareable = shareable)
                 this_ride.save()
             except:
                 redirect('request_ride')

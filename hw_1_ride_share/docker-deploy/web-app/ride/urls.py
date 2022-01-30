@@ -14,6 +14,7 @@ urlpatterns = [
     path('rides/<pk>/', RideDetailView.as_view(), name='ride-detail'),
     path('vehicle/', views.myVehicle, name='vehicle'),
     path('open_rides/', views.open_rides, name='open_rides'),
+    path('join_ride/', views.open_rides, name='join_ride'),
     path('request_ride/', views.request_ride, name='request_ride'),
     #path('rides/new/', RideCreateView.as_view(), name='ride-create'),
     #path('vehicle/new/', VehicleCreateView.as_view(), name='vehicle-create'),
