@@ -7,10 +7,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('ride', '0048_merge_20220131_1316'),
-<<<<<<< HEAD
-        ('ride', '0048_merge_20220131_1322'),
-=======
->>>>>>> 3e689e542d215d6d4412e545e9bea63b2ee201e8
     ]
 
     operations = [
