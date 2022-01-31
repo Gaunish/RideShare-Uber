@@ -33,6 +33,9 @@ class Vehicle(models.Model):
         """String for representing the Model object."""
         return self.license_plate
 
+    def get_absolute_url(self):
+        """Returns the url to access a update record for this vehicle."""
+        return reverse('vehicle-update', args=[str(self.id)])
 
 # COMMENTED TO MAKE SURE WE WANT A RIDE CLASS BEFORE MAKE MIGRATIONS
 class Ride(models.Model):
@@ -68,8 +71,8 @@ class Ride(models.Model):
         return f"{self.owner}'s Trip to {self.destination}"
 
     def get_absolute_url(self):
-        """Returns the url to access a detail record for this ride."""
-        return reverse('ride-detail', args=[str(self.id)])
+        """Returns the url to access a update record for this ride."""
+        return reverse('ride-update', args=[str(self.id)])
         
     #@property
     #def driver(self):

@@ -4,8 +4,8 @@ from .models import User, Vehicle, Ride, Rider
 from .forms import Login, Register, RequestRideForm, Register_driver, RequestRideShare
 from datetime import datetime
 from django.utils import timezone
-from django.views.generic import ListView, DetailView, CreateView
-
+from django.views.generic import UpdateView, DetailView
+from django.urls import reverse
 
 def index(request):
     user = login_required(request)
@@ -175,22 +175,33 @@ def user_home(request):
     
     return render(request, 'user/home.html', {'name' : user.user_name})
 
-
-
-class RideListView(ListView):
-    model = Ride
-    template_name = 'user/rides.html'
-    context_object_name = 'all_rides'
-    ordering = ['-arrival']
-
-    def get_queryset(self):
-        user = User.objects.get(id = request.session['id'])
-        return Ride.objects.filter(owner = user)
-
 class RideDetailView(DetailView):
     model = Ride
     template_name = 'user/ride_detail.html'
     context_object_name = 'this_ride'
+
+class RideUpdateView(UpdateView):
+    model = Ride
+    template_name = 'user/ride_form.html'
+    fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        view_name = 'rides'
+        return reverse(view_name)
+
+class VehicleUpdateView(UpdateView):
+    model = Vehicle
+    fields = ['vehicle_type', 'capacity', 'license_plate']
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        view_name = 'vehicle'
+        return reverse(view_name)
 '''
 class RideCreateView(CreateView):
     model = Ride
@@ -226,7 +237,7 @@ class VehicleCreateView(CreateView):
 def rides(request):
     user = User.objects.get(id = request.session['id'])
     context = {
-        'all_rides': Ride.objects.filter(owner = user)
+        'all_rides': Ride.objects.filter(owner = user, status__in = ['o', 'f'])
     }
     return render(request,'user/rides.html', context)
 
