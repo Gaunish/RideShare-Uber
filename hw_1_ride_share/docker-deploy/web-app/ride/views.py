@@ -6,6 +6,8 @@ from datetime import datetime
 from django.utils import timezone
 from django.views.generic import UpdateView, DetailView
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.conf import settings
 
 def index(request):
     user = login_required(request)
@@ -198,6 +200,90 @@ def driver_home(request):
     
     return render(request, 'driver/home.html', {'name' : user.user_name})
 
+
+#Route to update ride status to finished
+def finish_ride(request, ride):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    #sql query to update ride to status = finished
+    try:
+        this_ride = Ride.objects.get(id = ride)
+        this_ride.status = 'c'
+        this_ride.save()
+    except:
+        return redirect('conf_rides_detail', ride)
+
+    return redirect('view_rides')
+
+    
+#Route to view detail of particular ride, to finish it(Driver end)
+def conf_rides_detail(request, ride):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    #sql query to get user
+    driver = User.objects.get(id = request.session['id'])
+
+    #get details of ride
+    try:
+        ride = Ride.objects.get(id = ride)
+    except:
+        return redirect('view_rides')
+
+    #get details of owner, sharers
+    try:
+        owner = Rider.objects.get(ride = ride, is_sharer = False)
+        sharers = list(Rider.objects.filter(ride = ride, is_sharer = True))
+
+    except:
+        return redirect('view_rides')
+
+    
+    context = {
+        'ride': ride,
+        'owner': owner,
+        'sharers': sharers
+    }
+
+    return render(request, 'driver/ride_detail.html', context)
+    
+
+#Route to view confirmed rides, update to finished (Driver end)
+def view_rides(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    #sql query to get user
+    driver = User.objects.get(id = request.session['id'])
+
+    #sql query to get confirmed rides
+    try:
+        #FOR TESTING : CHANGE C TO F
+        rides = list(Ride.objects.filter(driver = driver, status = 'f'))
+    except:
+        return redirect('driver_home')
+
+    return render(request, 'driver/conf_rides.html', {'rides':rides})
+    
 #Route to change status from open to confirmed (Driver end)
 def confirm_ride(request, ride):
     #check if user is logged in
@@ -214,13 +300,30 @@ def confirm_ride(request, ride):
         this_ride = Ride.objects.get(id = ride)
         driver = User.objects.get(id = request.session['id'])
         this_ride.driver = driver
-        this_ride.status = 'c'
+        this_ride.status = 'f'
         this_ride.save()
         
     except:
         return redirect('rides')
 
-    return redirect('driver_home')
+    subject = 'Ride-Share ride #' + str(ride) + ' is confirmed'
+    message = ' Hello!\n Your ride #' + str(ride) + ' is confirmed.\n Thanks,\n Ride-share'
+
+    recipient = [driver.email]
+
+    #get list of riders
+    try:
+        riders = list(Rider.objects.filter(ride = this_ride))
+        for rider in riders:
+            recipient.append(rider.rider.email)
+    except:
+        return redirect('rides')
+
+    #send emails
+    send_mail(subject, message, settings.EMAIL_HOST_USER, recipient)
+    
+    
+    return redirect('view_rides')
     
     
 #Route to search for open rides (Driver end)
@@ -244,13 +347,16 @@ def search_ride(request):
 
     try:
         #get matching rides
-        if veh_d.special_info != None:
-            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info))
+        if not veh_d.special_info:
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info, status = 'o'))
         else:
-            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity))
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, status = 'o'))
     except:
         ride = None
-    
+
+    if len(ride) == 0:    
+        ride = None
+        
     return render(request, 'driver/rides.html', {'rides':ride})
 
    
@@ -335,7 +441,7 @@ def add_ride(request, ride, num):
     try:
         this_user = User.objects.get(id = request.session['id'])
         this_ride = Ride.objects.get(id = ride)
-        this_rider = Rider(ride = this_ride, rider = this_user, num = num, is_sharer = True)
+        this_rider = Rider(ride = this_ride, rider = this_user, num = num, name = this_user.user_name,  is_sharer = True)
         this_rider.save()
         this_ride.capacity_remaining = this_ride.capacity_remaining - num
         this_ride.num_passengers = this_ride.num_passengers + num
@@ -434,7 +540,7 @@ def request_ride(request):
 
             try:
                 this_ride = Ride.objects.get(owner = user, vehicle = vehicle, arrival = arrival)
-                this_rider = Rider(ride = this_ride, rider = user, num = num_passengers, is_sharer = False)
+                this_rider = Rider(ride = this_ride, rider = user, num = num_passengers, name = user.user_name, is_sharer = False)
                 this_rider.save()
             except:
                 redirect('request_ride')

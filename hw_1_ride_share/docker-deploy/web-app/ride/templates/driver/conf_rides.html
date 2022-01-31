@@ -1,0 +1,15 @@
+{% extends "driver_gen.html" %}
+
+{% block content %}
+  <h1>View my Rides</h1>
+  <body>
+    {% for ride in rides %}      
+        <h3><a href={% url 'conf_rides_detail' ride=ride.id %}>{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
+      <p><strong>Status:</strong> {{ ride.status }} </p>
+      <p><strong>Destination:</strong> {{ ride.destination }} </p>
+      <p><strong>Arrival Time:</strong> {{ ride.arrival }}</p>
+      <br>
+      <br>
+    {% endfor %}
+  </body>
+{% endblock %}
