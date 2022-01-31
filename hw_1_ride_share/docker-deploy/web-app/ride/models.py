@@ -69,7 +69,7 @@ class Ride(models.Model):
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this ride."""
-        return reverse('ride-detail', args=[str(self.id)])
+        return reverse('ride-update', args=[str(self.id)])
         
     #@property
     #def driver(self):
