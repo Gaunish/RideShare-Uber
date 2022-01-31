@@ -51,7 +51,7 @@ class RequestRideForm(ModelForm):
 
     class Meta:
         model = Ride
-        fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
+        fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable', 'special_request']
 
 
 class RequestRideShare(forms.Form):

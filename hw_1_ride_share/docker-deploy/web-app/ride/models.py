@@ -28,6 +28,7 @@ class Vehicle(models.Model):
     license_plate = models.CharField(max_length=7, unique = True)
     capacity = models.PositiveIntegerField()
     owner = models.OneToOneField(User, on_delete=models.CASCADE, default=None) #, choices=User.objects.filter(user_type='D'))
+    special_info = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -48,7 +49,7 @@ class Ride(models.Model):
     capacity_remaining = models.PositiveIntegerField(default=4)
     destination = models.CharField(max_length=200, help_text='What is your destination?')
     shareable = models.BooleanField(default=False)
-    #special_request = models.CharField(blank=True)
+    special_request = models.CharField(max_length=200, blank=True)
 
     RIDE_STATUS = (
         ('o', 'Open'),
