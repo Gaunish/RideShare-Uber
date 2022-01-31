@@ -192,6 +192,16 @@ class RideUpdateView(UpdateView):
         view_name = 'rides'
         return reverse(view_name)
 
+class VehicleUpdateView(UpdateView):
+    model = Vehicle
+    fields = ['vehicle_type', 'capacity', 'license_plate']
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        view_name = 'vehicle'
+        return reverse(view_name)
 '''
 class RideCreateView(CreateView):
     model = Ride

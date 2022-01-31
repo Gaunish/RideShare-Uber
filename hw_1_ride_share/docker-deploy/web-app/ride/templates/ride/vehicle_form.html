@@ -1,14 +1,14 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Register Your Vehicle</h1>
+  <h3>Update Vehicle</h3>
   <body>
     <form action="" method="post">
       {% csrf_token %}
       <table>
         {{ form.as_table }}
       </table>
-      <input type="submit" value="Register">
+      <input type="submit" value="Update">
     </form>
   </body>
 {% endblock %}

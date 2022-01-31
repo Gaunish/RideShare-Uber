@@ -1,9 +1,9 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>My Vehicle</h1>
   <body>
     {% for car in my_vehicle %}
+      <h3><a href="{{ car.get_absolute_url }}">My Vehicle</a></h3>
       <p> {{ car.owner.user_name }}'s Car</p>
       <p><strong>License Plate:</strong> {{ car.license_plate }} </p>
       <p><strong>Capacity:</strong> {{ car.capacity }} </p>
