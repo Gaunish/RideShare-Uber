@@ -294,7 +294,7 @@ def rides(request):
     return render(request,'user/rides.html', context)
 
 #route to select open rides
-def add_ride(request, ride, user, num):
+def add_ride(request, ride, num):
     #check if user is logged in
     user = login_required(request)
     if user == False:
@@ -309,7 +309,9 @@ def add_ride(request, ride, user, num):
         this_ride = Ride.objects.get(id = ride)
         this_rider = Rider(ride = this_ride, rider = this_user, num = num, is_sharer = True)
         this_rider.save()
-        this_ride['capacity_remaining'] = this_ride.capacity_remaining - num
+        this_ride.capacity_remaining = this_ride.capacity_remaining - num
+        this_ride.num_passengers = this_ride.num_passengers + num
+        this_ride.save()
     except:
         return redirect('open_rides')
     
