@@ -5,7 +5,7 @@
   <body>
     {% for ride in rides %}      
         <h3><a href={% url 'conf_rides_detail' ride=ride.id %}>{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
-      <p><strong>Status:</strong> {{ ride.status }} </p>
+      <p><strong>Status:</strong> {{ ride.get_status_display }} </p>
       <p><strong>Destination:</strong> {{ ride.destination }} </p>
       <p><strong>Arrival Time:</strong> {{ ride.arrival }}</p>
       <br>

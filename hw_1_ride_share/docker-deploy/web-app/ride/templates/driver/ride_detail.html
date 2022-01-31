@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Ride {{ ride.id }}</h1>
   <br>
-  <br>
+  
   <body>
     <h4>{{ owner.name }}'s Ride with Party of {{ owner.num }}</h4>
     
@@ -12,7 +12,7 @@
     <h4>Sharer {{sharer.name}} with Party of {{ sharer.num }}</h4>
     {% endfor %}
     <br>
-    <br>
+    
     <p><strong>Destination:</strong> {{ ride.destination }} </p>
     <p><strong>Trip Status:</strong> {{ ride.get_status_display }} </p>
     <p><strong>Arrival Time:</strong> {{ ride.arrival }}</p>
