@@ -282,18 +282,6 @@ class VehicleUpdateView(UpdateView):
     def get_success_url(self):
         view_name = 'vehicle'
         return reverse(view_name)
-
-'''class RiderUpdateView(UpdateView):
-    model = Rider
-    template_name = 'user/rider_form.html'
-    fields = ['ride']
-
-    def form_valid(self, form):
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        view_name = 'rides'
-        return reverse(view_name)'''
 '''
 class RideCreateView(CreateView):
     model = Ride
@@ -328,10 +316,10 @@ class VehicleCreateView(CreateView):
 
 def rides(request):
     user = User.objects.get(id = request.session['id'])
-    shared_rides = Rider.objects.filter(rider = user, is_sharer = True)
+    Rider.objects.filter(
     context = {
-        'all_rides': Ride.objects.filter(owner = user, status__in = ['o', 'f']),
-        'shared_rides': shared_rides
+        'all_rides': Ride.objects.filter(owner = user, status__in = ['o', 'f'])
+        'shared_rides': Rider
     }
     return render(request,'user/rides.html', context)
 
@@ -359,24 +347,6 @@ def add_ride(request, ride, num):
     
     return redirect('rides')
     
-def leave_ride(request, ride):
-    #check if user is logged in
-    user = login_required(request)
-    if user == False:
-        return redirect('login')
-    #check user type is user
-    if check_user(request) == False:
-        return redirect('login')
-
-    try:
-        this_rider = Rider.objects.get(id = ride)
-        this_rider.ride.capacity_remaining = this_ride.ride.capacity_remaining + this_rider.num
-        this_rider.ride.save()
-    except:
-        return redirect('open_rides')
-
-    return redirect('rides')
-
 #route to search for rides to share
 def open_rides(request):
     #check if user is logged in

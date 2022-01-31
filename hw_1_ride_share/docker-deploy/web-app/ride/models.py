@@ -89,3 +89,7 @@ class Rider(models.Model):
     def __str__(self):
         """String for representing the Model object."""
         return f"{ self.ride.owner }'s Shareable Trip { self.ride.destination }"
+
+    def get_absolute_url(self):
+        """Returns the url to access a update record for this ride."""
+        return reverse('rider-update', args=[str(self.id)])

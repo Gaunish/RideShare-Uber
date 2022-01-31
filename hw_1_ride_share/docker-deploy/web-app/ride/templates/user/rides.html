@@ -1,7 +1,7 @@
 {% extends "user_gen.html" %}
 
 {% block content %}
-  <h1>View My Rides</h1>
+  <h1>My Rides</h1>
   <body>
     {% for ride in all_rides %}
       {% if ride.status == 'f' %}
@@ -16,6 +16,22 @@
       <p><strong>Destination:</strong> {{ ride.destination }} </p>
       <p><strong>Trip Status:</strong> {{ ride.get_status_display }} </p>
       <p><strong>Arrival Time:</strong> {{ ride.arrival }}</p>
+    {% endfor %}
+
+    <h1>Shared Rides</h1>
+    {% for ride in shared_rides %}
+      {% if ride.ride.status == 'f' or ride.ride.status == 'o' %}
+        {% if ride.ride.status == 'f' %}
+          <h3>Shared Ride with {{ ride.ride.owner }}</h3>
+          <p>Look for {{ ride.ride.driver }} with the license plate {{ ride.license_plate }} </p>
+        {% else %}
+          <h3><a href="{{ 'leave_ride' ride=ride.id }}">Shared Ride with {{ ride.ride.owner }} [Click to Leave Ride]</a></h3>
+          <p>Looking for driver...</p>
+        {% endif %}
+        <p><strong>Destination:</strong> {{ ride.ride.destination }} </p>
+        <p><strong>Trip Status:</strong> {{ ride.ride.get_status_display }} </p>
+        <p><strong>Arrival Time:</strong> {{ ride.ride.arrival }}</p>
+      {% endif %}
     {% endfor %}
   </body>
 {% endblock %}
