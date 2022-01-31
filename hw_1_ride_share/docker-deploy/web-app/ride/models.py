@@ -33,6 +33,7 @@ class Vehicle(models.Model):
         """String for representing the Model object."""
         return self.license_plate
 
+
 # COMMENTED TO MAKE SURE WE WANT A RIDE CLASS BEFORE MAKE MIGRATIONS
 class Ride(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name='ride_owner')
@@ -44,7 +45,6 @@ class Ride(models.Model):
     capacity_remaining = models.PositiveIntegerField(default=4)
     destination = models.CharField(max_length=200, help_text='What is your destination?')
     shareable = models.BooleanField(default=False)
-    sharer = models.ManyToManyField(User, default=None, blank=True, related_name='ride_sharer')
     #special_request = models.CharField(blank=True)
 
     RIDE_STATUS = (
@@ -76,3 +76,8 @@ class Ride(models.Model):
     #    return self.vehicle.getattr(owner)
 
 
+class Rider(models.Model):
+    ride = models.ForeignKey(Ride, on_delete=models.CASCADE, default=None, related_name = 'ride')
+    rider = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name = 'rider')
+    num = models.PositiveIntegerField(default=1)
+    is_sharer = models.BooleanField()

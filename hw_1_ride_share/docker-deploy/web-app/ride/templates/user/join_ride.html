@@ -3,16 +3,17 @@
 {% block content %}
   <h1>Open Rides</h1>
   <body>
-  {% if open_ride != None %}
-    <h5>Join {{ open_ride.owner }}'s Ride to {{ open_ride.destination }}.</h5>
-    <p>Trip will arrive at its destination at {{ open_ride.arrival }}</p>
-    <form action="" method="post">
+  {% if ride != None %}
+    <h5>Join {{ ride.owner }}'s Ride to {{ ride.destination }}.</h5>
+    <p>Trip will arrive at its destination at {{ ride.arrival }}</p>
+    <form action={% url 'add_ride' ride=ride.id user=id num=num %} method="post">
       {% csrf_token %}
       <table>
         {{ form.as_table }}
       </table>
       <input type="submit" value="Join Ride">
     </form>
+ 
   {% else %}
     <p>There are currently no open rides that match your request. Please request your own ride or try again later.</p>
   {% endif %}

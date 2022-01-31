@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import User, Vehicle, Ride
+from .models import User, Vehicle, Ride, Rider
 from .forms import Login, Register, RequestRideForm, Register_driver, RequestRideShare
 from datetime import datetime
 from django.utils import timezone
@@ -159,7 +159,7 @@ def reg_vehicle(request):
     }
     return render(request, 'ride/vehicle_form.html', context)    
 
-#Route for user home
+# Route for user home
 def user_home(request):
     #check if user is logged in
     user = login_required(request)
@@ -174,6 +174,7 @@ def user_home(request):
     user = User.objects.get(id = request.session['id'])
     
     return render(request, 'user/home.html', {'name' : user.user_name})
+
 
 
 class RideListView(ListView):
@@ -229,12 +230,32 @@ def rides(request):
     }
     return render(request,'user/rides.html', context)
 
-def open_rides(request):
-     #check if user is logged in
+#route to select open rides
+def add_ride(request, ride, user, num):
+    #check if user is logged in
     user = login_required(request)
     if user == False:
         return redirect('login')
+    #check user type is user
+    if check_user(request) == False:
+        return redirect('login')
 
+    try:
+        this_ride = Ride.objects.get(id = str(ride))
+        this_user = Ride.objects.get(id = str(user))
+        this_rider = Rider(ride = this_ride, rider = this_user, num = str(num), is_sharer = True)
+        this_rider.save()
+    except:
+        return redirect('open_rides')
+    
+    return redirect('rides')
+    
+#route to search for rides to share
+def open_rides(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
     #check user type is user
     if check_user(request) == False:
         return redirect('login')
@@ -251,19 +272,23 @@ def open_rides(request):
             num = form.cleaned_data['num_passengers']
 
             #verify input data
-            if start_arr < datetime.now() or end_arr < datetime.now():
+            if end_arr < start_arr:
                 return redirect('open_rides')
             if num < 1:
                 return redirect('open_rides')
 
-            #sql query
+            #sql query to search for ride
             try:
                 search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'o', capacity_remaining__gte = num, shareable = True)
             except:
-                return redirect('open_rides')
+                search = None
 
-            
-            return render(request, 'user/join_ride.html', {'open_ride' : search})
+            context ={
+                'ride' : search,
+                'id' : request.session['id'],
+                'num' : num
+            }
+            return render(request, 'user/join_ride.html', context)
 
     # Get view
     else:
@@ -275,7 +300,7 @@ def open_rides(request):
         
     return render(request,'user/open_rides.html', context)
 
-
+#route to request a ride
 def request_ride(request):
     #check if user is logged in
     user = login_required(request)
@@ -286,35 +311,39 @@ def request_ride(request):
     if check_user(request) == False:
         return redirect('login')
 
-    user = "None"
-    user_row = request.session.get('id', "None")
-    if user_row != "None":
-        user_r = User.objects.get(id = request.session['id'])
-        user = user_r.user_name
-
     user = User.objects.get(id = request.session['id'])
 
     if request.method == 'POST':
         form = RequestRideForm(request.POST)
 
         if form.is_valid():
+            #get user data
             arrival = form.cleaned_data['arrival']
             destination = form.cleaned_data['destination']
             num_passengers = form.cleaned_data['num_passengers']
             shareable = form.cleaned_data['shareable']
             vehicle = form.cleaned_data['vehicle']
-            
+
+            #get capacity of vehicle
             if vehicle == 's':
                 capacity = 4
             else:
                 capacity = 6
 
-            #sql query
+            #sql query to put ride into table
             try:
                 this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity_remaining = capacity - num_passengers, destination = destination, shareable = shareable)
-                this_ride.save()
+                this_ride.save()        
             except:
                 redirect('request_ride')
+
+            try:
+                this_ride = Ride.objects.get(owner = user, vehicle = vehicle, arrival = arrival)
+                this_rider = Rider(ride = this_ride, rider = user, num = num_passengers, is_sharer = False)
+                this_rider.save()
+            except:
+                redirect('request_ride')
+                
         return redirect('rides')
         
     else:
@@ -323,8 +352,7 @@ def request_ride(request):
         form = RequestRideForm()
 
     context = {
-        "form": form,
-        "name": user,
+        "form": form
     }
 
     return render(request,'user/request_ride.html', context)

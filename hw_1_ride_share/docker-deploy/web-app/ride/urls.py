@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', views.logout, name = 'logout'),
     path('user/', views.user_home, name = 'user_home'),
     path('rides/', views.rides, name='rides'),
+    path('add_ride/<int:ride>/<int:user>/<int:num>/', views.add_ride, name='add_ride'),
     #path('rides/', RideListView.as_view(), name='rides'),
     path('rides/<pk>/', RideDetailView.as_view(), name='ride-detail'),
     path('vehicle/', views.myVehicle, name='vehicle'),
