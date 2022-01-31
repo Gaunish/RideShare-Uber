@@ -24,15 +24,15 @@ class Register(forms.Form):
     user_type = forms.ChoiceField(label = 'User Type', choices=USER_CHOICES)
 
     
-VEHICLE_TYPE = (
-        ('s', 'Small'),
-        ('l', 'Large'),
-)
+#VEHICLE_TYPE = (
+ #       ('s', 'Small'),
+  #      ('l', 'Large'),
+#)
 
 class Register_driver(ModelForm):
     class Meta:
         model = Vehicle
-        fields = ['vehicle_type', 'license_plate', 'capacity'] 
+        fields = ['vehicle_type', 'license_plate', 'capacity', 'special_info'] 
 
 class RequestRideForm(ModelForm):
     #vehicle = forms.ChoiceField(choices=VEHICLE_TYPE)
