@@ -4,17 +4,18 @@
   <h1>View My Rides</h1>
   <body>
     {% for ride in all_rides %}
-      <h3><a href="{{ ride.get_absolute_url }}">{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
-      <p><strong>Destination:</strong> {{ ride.destination }} </p>
-      <p><strong>Trip Status:</strong> {{ ride.get_status_display }} </p>
-      <p><strong>Arrival Time:</strong> {{ ride.arrival }}</p>
       {% if ride.status == 'f' %}
+        <h3>{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
         <p>Look for {{ ride.driver }} with the license plate {{ ride.license_plate }} </p>
       {% elif ride.status == 'o' %}
+        <h3><a href="{{ ride.get_absolute_url }}">{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
         <p>Looking for driver...</p>
       {% else %}
         <p>Thank you for riding with {{ ride.driver }}.
       {% endif %}
+      <p><strong>Destination:</strong> {{ ride.destination }} </p>
+      <p><strong>Trip Status:</strong> {{ ride.get_status_display }} </p>
+      <p><strong>Arrival Time:</strong> {{ ride.arrival }}</p>
     {% endfor %}
   </body>
 {% endblock %}
