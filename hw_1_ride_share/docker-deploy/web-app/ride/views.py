@@ -10,8 +10,10 @@ from django.urls import reverse
 def index(request):
     user = login_required(request)
     if user == True:
-        return redirect('user_home')
-    
+        if check_user(request) == True:
+            return redirect('user_home')
+        else:
+            return redirect('driver_home')
     return render(request,'index.html')
 
 #function to check whether user is logged in
@@ -54,7 +56,11 @@ def login(request):
                return redirect('login')
 
             request.session['id'] = user.id;
-            return redirect('user_home')
+
+            if check_user(request) == True:
+                return redirect('user_home')
+            else:
+                return redirect('driver_home')
     #GET METHOD
     else:
         form = Login()
@@ -175,6 +181,35 @@ def user_home(request):
     user = User.objects.get(id = request.session['id'])
     
     return render(request, 'user/home.html', {'name' : user.user_name})
+
+#Route for driver home
+def driver_home(request):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    #sql query to get user
+    user = User.objects.get(id = request.session['id'])
+    
+    return render(request, 'driver/home.html', {'name' : user.user_name})
+
+#Route to search for open rides (Driver end)
+def search_ride(request): 
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+   
 
 class RideDetailView(DetailView):
     model = Ride
