@@ -34,6 +34,7 @@ class Register_driver(ModelForm):
         model = Vehicle
         fields = ['vehicle_type', 'license_plate', 'capacity', 'special_info'] 
 
+    
 class RequestRideForm(ModelForm):
     #vehicle = forms.ChoiceField(choices=VEHICLE_TYPE)
     #arrival = forms.DateTimeField()

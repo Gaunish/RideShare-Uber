@@ -1,0 +1,20 @@
+{% extends "driver_gen.html" %}
+
+{% block content %}
+  <h1>Open Rides</h1>
+  <body>
+    {% if rides != None %}
+    {%for ride in rides %}
+    <h5>Confirm {{ ride.owner }}'s Ride to {{ ride.destination }}.</h5>
+    <p>Trip will arrive at its destination, {{ ride.destination }} at {{ ride.arrival }}</p>
+    <form method="post">
+      {% csrf_token %}
+      <input type="submit" value="Confirm Ride">
+    </form>
+    {% endfor %}
+  {% else %}
+    <p>There are currently no open rides that match your vehicle. Please request try again later.</p>
+  {% endif %}
+  </body>
+{% endblock %}
+

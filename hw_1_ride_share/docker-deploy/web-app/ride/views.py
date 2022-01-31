@@ -209,6 +209,22 @@ def search_ride(request):
     if check_user(request) == True:
         return redirect('login')
 
+    #get driver, vehicle field. Then, get matching rides
+    try:
+        driver = User.objects.get(id = request.session['id'])
+        veh_d = Vehicle.objects.get(owner = driver)
+    
+    except:
+        return redirect('driver_home')
+
+    #try:
+        #get matching rides
+    ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info))
+    #except:
+        #ride = None
+    
+    return render(request, 'driver/rides.html', {'rides':ride})
+
    
 
 class RideDetailView(DetailView):
@@ -326,12 +342,12 @@ def open_rides(request):
 
             #sql query to search for ride
             try:
-                search = Ride.objects.get(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'o', capacity_remaining__gte = num, shareable = True)
+                search = list(Ride.objects.filter(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'o', capacity_remaining__gte = num, shareable = True))
             except:
                 search = None
 
             context ={
-                'ride' : search,
+                'rides' : search,
                 'id' : request.session['id'],
                 'num' : num
             }
