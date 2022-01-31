@@ -303,9 +303,12 @@ def add_ride(request, ride, user, num):
     if check_user(request) == False:
         return redirect('login')
 
+
     try:
         #this_ride = Ride.objects.get(id = str(ride))
         #this_user = Ride.objects.get(id = str(user))
+        this_user = User.objects.get(id = request.session['id'])
+        this_ride = Ride.objects.get(id = ride)
         this_rider = Rider(ride = this_ride, rider = this_user, num = num, is_sharer = True)
         this_rider.save()
     except:

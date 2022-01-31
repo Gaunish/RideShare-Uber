@@ -85,3 +85,7 @@ class Rider(models.Model):
     rider = models.ForeignKey(User, on_delete=models.CASCADE, default=None, related_name = 'rider')
     num = models.PositiveIntegerField(default=1)
     is_sharer = models.BooleanField()
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f"{ self.ride.owner }'s Shareable Trip { self.ride.destination }"
