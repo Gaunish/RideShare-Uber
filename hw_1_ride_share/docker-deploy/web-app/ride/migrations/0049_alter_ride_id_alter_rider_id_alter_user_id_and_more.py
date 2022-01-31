@@ -6,7 +6,11 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
+<<<<<<< HEAD
         ('ride', '0048_merge_20220131_1316'),
+=======
+        ('ride', '0048_merge_20220131_1322'),
+>>>>>>> 90c4ec681e5580f4882dd03ddcccb3c69dd10258
     ]
 
     operations = [
