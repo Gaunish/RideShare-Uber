@@ -136,11 +136,12 @@ def reg_vehicle(request):
             veh_type = form.cleaned_data['vehicle_type']
             plate = form.cleaned_data['license_plate']
             cap = form.cleaned_data['capacity']
+            info = form.cleaned_data['special_info']
             driver = User.objects.get(id = request.session['id'])
 
             #sql query to register user in table user
             try:
-                vehicle = Vehicle(vehicle_type = veh_type, license_plate = plate, capacity = cap, owner = driver)
+                vehicle = Vehicle(vehicle_type = veh_type, license_plate = plate, capacity = cap, owner = driver, special_info = info)
                 vehicle.save()
             except:
                 #delete record from user
@@ -183,7 +184,7 @@ class RideDetailView(DetailView):
 class RideUpdateView(UpdateView):
     model = Ride
     template_name = 'user/ride_form.html'
-    fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
+    fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable', 'special_request']
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -194,7 +195,7 @@ class RideUpdateView(UpdateView):
 
 class VehicleUpdateView(UpdateView):
     model = Vehicle
-    fields = ['vehicle_type', 'capacity', 'license_plate']
+    fields = ['vehicle_type', 'capacity', 'license_plate', 'special_info']
 
     def form_valid(self, form):
         return super().form_valid(form)
@@ -334,6 +335,7 @@ def request_ride(request):
             num_passengers = form.cleaned_data['num_passengers']
             shareable = form.cleaned_data['shareable']
             vehicle = form.cleaned_data['vehicle']
+            request = form.cleaned_data['special_request']
 
             #get capacity of vehicle
             if vehicle == 's':
@@ -343,7 +345,7 @@ def request_ride(request):
 
             #sql query to put ride into table
             try:
-                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity_remaining = capacity - num_passengers, destination = destination, shareable = shareable)
+                this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity_remaining = capacity - num_passengers, destination = destination, shareable = shareable, special_request = request)
                 this_ride.save()        
             except:
                 redirect('request_ride')
