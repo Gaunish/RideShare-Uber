@@ -7,7 +7,7 @@
   {%for ride in rides %}
   <h5>Join {{ ride.owner }}'s Ride to {{ ride.destination }}.</h5>
     <p>Trip will arrive at its destination, {{ ride.destination }} at {{ ride.arrival }}</p>
-    <form action={% url 'add_ride' ride=ride.id user=id num=num %} method="post">
+    <form action={% url 'add_ride' ride=ride.id num=num %} method="post">
       {% csrf_token %}
       <!--<table>
         {{ form.as_table }}
