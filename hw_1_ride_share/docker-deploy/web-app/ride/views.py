@@ -5,7 +5,7 @@ from .forms import Login, Register, RequestRideForm, Register_driver, RequestRid
 from datetime import datetime
 from django.utils import timezone
 from django.views.generic import UpdateView, DetailView
-
+from django.urls import reverse
 
 def index(request):
     user = login_required(request)
@@ -187,6 +187,10 @@ class RideUpdateView(UpdateView):
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+    def get_success_url(self):
+        view_name = 'rides'
+        return reverse(view_name)
 
 '''
 class RideCreateView(CreateView):
