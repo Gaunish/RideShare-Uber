@@ -7,7 +7,7 @@
     {%for ride in rides %}
     <h5>Confirm {{ ride.owner }}'s Ride to {{ ride.destination }}.</h5>
     <p>Trip will arrive at its destination, {{ ride.destination }} at {{ ride.arrival }}</p>
-    <form method="post">
+    <form action = {% url 'confirm_ride' ride=ride.id %} method="post">
       {% csrf_token %}
       <input type="submit" value="Confirm Ride">
     </form>

@@ -198,6 +198,31 @@ def driver_home(request):
     
     return render(request, 'driver/home.html', {'name' : user.user_name})
 
+#Route to change status from open to confirmed (Driver end)
+def confirm_ride(request, ride):
+    #check if user is logged in
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    #get ride and update its fields
+    try:
+        this_ride = Ride.objects.get(id = ride)
+        driver = User.objects.get(id = request.session['id'])
+        this_ride.driver = driver
+        this_ride.status = 'c'
+        this_ride.save()
+        
+    except:
+        return redirect('rides')
+
+    return redirect('driver_home')
+    
+    
 #Route to search for open rides (Driver end)
 def search_ride(request): 
     #check if user is logged in
@@ -217,11 +242,14 @@ def search_ride(request):
     except:
         return redirect('driver_home')
 
-    #try:
+    try:
         #get matching rides
-    ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info))
-    #except:
-        #ride = None
+        if veh_d.special_info != None:
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info))
+        else:
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity))
+    except:
+        ride = None
     
     return render(request, 'driver/rides.html', {'rides':ride})
 
