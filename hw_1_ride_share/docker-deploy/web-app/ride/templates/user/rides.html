@@ -8,7 +8,7 @@
         <h3>{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
         <p>Look for {{ ride.driver }} with the license plate {{ ride.license_plate }} </p>
       {% elif ride.status == 'o' %}
-        <h3><a href="{{ ride.get_absolute_url }}">{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }})</a></h3>
+        <h3><a href="{{ ride.get_absolute_url }}">{{ ride.owner }}'s Ride (Party of {{ ride.num_passengers }}) [Edit]</a></h3>
         <p>Looking for driver...</p>
       {% else %}
         <p>Thank you for riding with {{ ride.driver }}.

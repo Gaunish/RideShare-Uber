@@ -451,49 +451,6 @@ class VehicleUpdateView(UpdateView):
         view_name = 'profile'
         return reverse(view_name)
 
-'''class RiderUpdateView(UpdateView):
-    model = Rider
-    template_name = 'user/rider_form.html'
-    fields = ['ride']
-
-    def form_valid(self, form):
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        view_name = 'rides'
-        return reverse(view_name)'''
-'''
-class RideCreateView(CreateView):
-    model = Ride
-    #context_object_name = 'new_ride'
-    fields = ['arrival', 'destination', 'num_passengers', 'vehicle', 'shareable']
-
-    def form_valid(self, form):
-        #form.instance.owner = self.request.user
-        user_row = self.request.session.get('id', "None")
-        if user_row != "None":
-            user = User.objects.get(id = request.session['id'])
-        print (user)
-        form.instance.owner = user
-        return super().form_valid(form)
-    def get_initial(self):
-        return {
-             'owner': self.request.user,
-             'destination': datetime.date.today()
-        }
-
-class VehicleCreateView(CreateView):
-    model = Vehicle
-    fields = ['vehicle_type', 'capacity', 'license_plate']
-
-    def form_valid(self, form):
-        form.instance.owner = self.request.user
-        return super().form_valid(form)
-
-#overrided by RideListView - same functionality
-'''
-
-
 def rides(request):
     user = User.objects.get(id = request.session['id'])
     shared_rides = Rider.objects.filter(rider = user, is_sharer = True)
@@ -513,7 +470,6 @@ def add_ride(request, ride, num):
     if check_user(request) == False:
         return redirect('login')
 
-
     try:
         this_user = User.objects.get(id = request.session['id'])
         this_ride = Ride.objects.get(id = ride)
@@ -527,6 +483,7 @@ def add_ride(request, ride, num):
     
     return redirect('rides')
     
+#leave ride if you're a sharer
 def leave_ride(request, ride):
     #check if user is logged in
     user = login_required(request)
