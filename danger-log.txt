@@ -1,6 +1,7 @@
 Danger Log - Homework 1 Ride Share
 Gaunish Garg - gg147
 Owen Gibson - ogg4
+----------------------------
 
 1) A user may navigate to driver ride search page and mess up the implemented code for driver and vice versa.
 
