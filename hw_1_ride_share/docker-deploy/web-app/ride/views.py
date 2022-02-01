@@ -411,7 +411,7 @@ def search_ride(request):
         if not veh_d.special_info:
             ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info, status = 'o').exclude(owner=driver))
         else:
-            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, status = 'o').exclude(owner=driver)
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, status = 'o').exclude(owner=driver))
     except:
         ride = None
 
