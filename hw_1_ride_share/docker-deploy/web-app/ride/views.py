@@ -442,7 +442,7 @@ class RideUpdateView(UpdateView):
 class VehicleUpdateView(UpdateView):
     model = Vehicle
     template_name = 'driver/vehicle_form.html'
-    fields = ['vehicle_type', 'capacity', 'license_plate', 'special_info']
+    fields = ['vehicle_type', 'license_plate', 'special_info']
 
     def form_valid(self, form):
         return super().form_valid(form)

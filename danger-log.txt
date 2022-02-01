@@ -14,12 +14,12 @@ Owen Gibson - ogg4
 
 6) A driver may not have registered vehicle (Update : implemented guarantee in login)
 
-7) A user changes his/her type into driver and does not register a vehicle
+7) A user may change his/her type into driver and may bypass registering a vehicle.
 
-8) Email is not configured properly to send to all required recipients
+8) Email  nmay not configured properly to send to all required recipients
 
-9) Datetype format is not specified properly leading to inconsistency, unexpected errors
+9) Maybe, Datetype format is not specified properly leading to inconsistency, unexpected errors.
 
-10) User/sharer enters negative no of passenger -> unexpected owners
+10) User/sharer may enter negative no of passenger -> unexpected owners.
 
 11) Sharer shouldnt join rides he/she created. they should be mutually exclusive for a ride
