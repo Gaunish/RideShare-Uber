@@ -62,6 +62,8 @@ def login(request):
             if check_user(request) == True:
                 return redirect('user_home')
             else:
+                
+                
                 return redirect('driver_home')
     #GET METHOD
     else:
@@ -346,7 +348,7 @@ def confirm_ride(request, ride):
         vehicle = Vehicle.objects.get(owner = driver)
         this_ride.driver = driver
         this_ride.status = 'f'
-        this.license_plate = vehicle.license_plate
+        this_ride.license_plate = vehicle.license_plate
         this_ride.save()
         
     except:
