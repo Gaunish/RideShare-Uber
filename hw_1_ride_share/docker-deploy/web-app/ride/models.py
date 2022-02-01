@@ -54,7 +54,7 @@ class Ride(models.Model):
     destination = models.CharField(max_length=200, help_text='What is your destination?')
     shareable = models.BooleanField(default=False)
     special_request = models.CharField(max_length=200, blank=True)
-    license_plate = models.CharField(max_length=7, default=None)
+    license_plate = models.CharField(max_length=7, default=None, null=True, blank=True)
 
     RIDE_STATUS = (
         ('o', 'Open'),

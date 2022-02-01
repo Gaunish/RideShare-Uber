@@ -210,7 +210,7 @@ def reg_vehicle(request):
     context = {
         'form' : form,
     }
-    return render(request, 'ride/vehicle_form.html', context)    
+    return render(request, 'driver/vehicle_form.html', context)    
 
 # Route for user home
 def user_home(request):
