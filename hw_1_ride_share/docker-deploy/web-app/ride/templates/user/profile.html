@@ -1,0 +1,11 @@
+{% extends "user_gen.html" %}
+
+{% block content %}
+  <body>
+    {% for this_user in user %}
+      <h3><a href="{{ this_user.get_absolute_url }}">Edit Profile</a></h3>
+      <p><strong>Email:</strong> {{ this_user.email }}</p>
+      <p><strong>User Type:</strong> User</p>
+    {% endfor %} 
+  </body>
+{% endblock %}

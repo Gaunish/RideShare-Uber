@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RideUpdateView, RideDetailView, VehicleUpdateView
+from .views import RideUpdateView, RideDetailView, VehicleUpdateView, UserUpdateView
 from . import views
 from django.views.generic import RedirectView
 
@@ -10,6 +10,7 @@ urlpatterns = [
     path('reg_vehicle/',views.reg_vehicle, name = 'reg_vehicle'),
     path('logout/', views.logout, name = 'logout'),
     path('profile/', views.profile, name = 'profile'),
+    path('profile_user/', views.profile_user, name = 'profile_user'),
     path('user/', views.user_home, name = 'user_home'),
     path('driver/', views.driver_home, name = 'driver_home'),
     path('search_ride/', views.search_ride, name = 'search_ride'),
@@ -26,4 +27,5 @@ urlpatterns = [
     path('request_ride/', views.request_ride, name='request_ride'),
     path('rides/<pk>/update/', RideUpdateView.as_view(), name='ride-update'),
     path('vehicle/<pk>/update/', VehicleUpdateView.as_view(), name='vehicle-update'),
+    path('user/<pk>/update/', UserUpdateView.as_view(), name='user-update'),
 ]

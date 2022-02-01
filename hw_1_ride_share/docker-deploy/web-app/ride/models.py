@@ -17,6 +17,10 @@ class User(models.Model):
         """String for representing the Model object."""
         return self.user_name
 
+    def get_absolute_url(self):
+        """Returns the url to access a update record for this User."""
+        return reverse('user-update', args=[str(self.id)])
+
 VEHICLE_TYPE = (
         ('s', 'Small'),
         ('l', 'Large'),

@@ -2,9 +2,14 @@
 
 {% block content %}
   <body>
+    {% for this_user in user %}
+      <h3><a href="{{ this_user.get_absolute_url }}">Edit Profile</a></h3>
+      <p><strong>Email:</strong> {{ this_user.email }}</p>
+      <p><strong>User Type:</strong> Driver</p>
+    {% endfor %} 
+
     {% for car in my_vehicle %}
       <h3><a href="{{ car.get_absolute_url }}">My Vehicle</a></h3>
-      <p> {{ car.owner.user_name }}'s Car</p>
       <p><strong>License Plate:</strong> {{ car.license_plate }} </p>
       <p><strong>Capacity:</strong> {{ car.capacity }} </p>
     {% endfor %}

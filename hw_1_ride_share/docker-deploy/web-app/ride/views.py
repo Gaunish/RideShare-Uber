@@ -92,10 +92,39 @@ def profile(request):
 
     user = User.objects.get(id = request.session['id'])
     context = {
-        'my_vehicle': Vehicle.objects.filter(owner = user)
+        'my_vehicle': Vehicle.objects.filter(owner = user),
+        'user': User.objects.filter(user_name = user.user_name)
     } 
 
     return render(request,'driver/profile.html', context)
+
+def profile_user(request):
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is user
+    if check_user(request) == False:
+        return redirect('login')
+
+    user = User.objects.get(id = request.session['id'])
+    context = {
+        'user': User.objects.filter(user_name = user.user_name)
+    }
+
+    return render(request,'user/profile.html', context)
+
+class UserUpdateView(UpdateView):
+    model = User
+    template_name = 'driver/user_form.html'
+    fields = ['email', 'password', 'user_type']
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        view_name = 'login'
+        return reverse(view_name)
 
 #Route to register the user
 def register(request):
