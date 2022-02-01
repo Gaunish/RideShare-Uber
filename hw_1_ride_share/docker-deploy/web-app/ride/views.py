@@ -81,6 +81,21 @@ def logout(request):
     del request.session['id']
     return redirect('login')
 
+def profile(request):
+    user = login_required(request)
+    if user == False:
+        return redirect('login')
+
+    #check user type is driver
+    if check_user(request) == True:
+        return redirect('login')
+
+    user = User.objects.get(id = request.session['id'])
+    context = {
+        'my_vehicle': Vehicle.objects.filter(owner = user)
+    } 
+
+    return render(request,'driver/profile.html', context)
 
 #Route to register the user
 def register(request):
@@ -380,13 +395,14 @@ class RideUpdateView(UpdateView):
 
 class VehicleUpdateView(UpdateView):
     model = Vehicle
+    template_name = 'driver/vehicle_form.html'
     fields = ['vehicle_type', 'capacity', 'license_plate', 'special_info']
 
     def form_valid(self, form):
         return super().form_valid(form)
 
     def get_success_url(self):
-        view_name = 'vehicle'
+        view_name = 'profile'
         return reverse(view_name)
 
 '''class RiderUpdateView(UpdateView):
@@ -600,5 +616,5 @@ def myVehicle(request):
     context = {
         'my_vehicle': Vehicle.objects.filter(owner = user)
     }
-    return render(request,'ride/vehicle.html', context)
+    return render(request,'driver/vehicle.html', context)
 
