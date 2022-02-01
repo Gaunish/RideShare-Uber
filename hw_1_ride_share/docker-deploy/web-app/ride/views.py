@@ -476,8 +476,12 @@ def leave_ride(request, ride):
 
     try:
         this_rider = Rider.objects.get(id = ride)
-        this_rider.ride.capacity_remaining = this_ride.ride.capacity_remaining + this_rider.num
+
+        this_rider.ride.capacity_remaining = this_rider.ride.capacity_remaining + this_rider.num
+        this_rider.ride.num_passengers = this_rider.ride.num_passengers - this_rider.num
         this_rider.ride.save()
+
+        this_rider.delete()
     except:
         return redirect('open_rides')
 
