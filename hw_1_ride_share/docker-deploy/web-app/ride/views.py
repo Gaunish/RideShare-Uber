@@ -62,11 +62,19 @@ def login(request):
             if check_user(request) == True:
                 return redirect('user_home')
             else:
-                
+                try:
+                    vehicle = Vehicle.objects.get(owner = user)
+                except:
+                    return redirect('reg_vehicle')
                 
                 return redirect('driver_home')
     #GET METHOD
     else:
+        #if user already logged in, logout first
+        user = login_required(request)
+        if user == True:
+            return redirect('logout')
+        
         form = Login()
 
     return render(request, 'auth/login.html', {'form':form})
@@ -145,7 +153,7 @@ def register(request):
 
             #check if password match
             if password != re_password:
-                redirect('register')
+                return redirect('register')
 
             #sql query to register user in table user
             try:
@@ -153,7 +161,7 @@ def register(request):
                 user.save()
             except:
                 #To implement : error message to be shown, password hash
-                redirect('register')
+                return redirect('register')
 
             #if driver, register vehicle
             if user_type == 'D':
@@ -173,11 +181,11 @@ def register(request):
 
 #Route for registering vehicle
 def reg_vehicle(request):
-    #check if user is logged in
+    #check user is logged in
     user = login_required(request)
     if user == False:
         return redirect('login')
-
+    
     #check user type is driver
     if check_user(request) == True:
         return redirect('login')
@@ -189,9 +197,14 @@ def reg_vehicle(request):
             #get cleansed data entered by user
             veh_type = form.cleaned_data['vehicle_type']
             plate = form.cleaned_data['license_plate']
-            cap = form.cleaned_data['capacity']
             info = form.cleaned_data['special_info']
             driver = User.objects.get(id = request.session['id'])
+
+            if veh_type == 's':
+                cap = 4
+            else:
+                cap = 6
+
 
             #sql query to register user in table user
             try:
@@ -621,14 +634,14 @@ def request_ride(request):
                 this_ride = Ride(owner = user, vehicle = vehicle, arrival = arrival, num_passengers = num_passengers, capacity_remaining = capacity - num_passengers, destination = destination, shareable = shareable, special_request = request)
                 this_ride.save()        
             except:
-                redirect('request_ride')
+                return redirect('request_ride')
 
             try:
                 this_ride = Ride.objects.get(owner = user, vehicle = vehicle, arrival = arrival)
                 this_rider = Rider(ride = this_ride, rider = user, num = num_passengers, name = user.user_name, is_sharer = False)
                 this_rider.save()
             except:
-                redirect('request_ride')
+                return redirect('request_ride')
                 
         return redirect('rides')
         

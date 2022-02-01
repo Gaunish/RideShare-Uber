@@ -32,7 +32,7 @@ class Register(forms.Form):
 class Register_driver(ModelForm):
     class Meta:
         model = Vehicle
-        fields = ['vehicle_type', 'license_plate', 'capacity', 'special_info'] 
+        fields = ['vehicle_type', 'license_plate', 'special_info'] 
 
     
 class RequestRideForm(ModelForm):
