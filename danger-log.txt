@@ -4,10 +4,10 @@ Owen Gibson - ogg4
 
 1) A user may navigate to driver ride search page and mess up the implemented code for driver and vice versa.
 
-2) A ride sharer may edit the shared ride causing errors.
+2) If a User knows the format of the urls they can search a specific Ride using the primary key. This would allow them to edit/update a Ride or join a Ride as a sharer.
 
-3) We were having troubles hashing passwords so if our database information has hacked, user passwords may be easily exposed/leaked.
+3) A User may also be able to take advantage of specific urls to edit/update a Vehicle.
 
-4) If a User knows the format of the urls they can search a specific Ride using the primary key, this is similar for knowing the url for a specific Vehicle.
+4) We were having trouble hashing passwords so if our database information has hacked, user passwords may be easily exposed/leaked.
 
-5) 
+5) We tried to check if User's are logged in when accessing specific pages, but some page checking may have been missed. This would allow incorrect user's access to edit and view database information. 
