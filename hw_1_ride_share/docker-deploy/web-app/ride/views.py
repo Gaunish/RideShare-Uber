@@ -409,9 +409,9 @@ def search_ride(request):
     try:
         #get matching rides
         if not veh_d.special_info:
-            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info, status = 'o'))
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, special_request = veh_d.special_info, status = 'o').exclude(owner=driver))
         else:
-            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, status = 'o'))
+            ride = list(Ride.objects.filter(vehicle = veh_d.vehicle_type, num_passengers__lte = veh_d.capacity, status = 'o').exclude(owner=driver)
     except:
         ride = None
 
@@ -527,6 +527,8 @@ def open_rides(request):
             end_arr = form.cleaned_data['end_arr']
             num = form.cleaned_data['num_passengers']
 
+            sharer = User.objects.get(id = request.session['id'])
+
             #verify input data
             if end_arr < start_arr:
                 return redirect('open_rides')
@@ -535,7 +537,7 @@ def open_rides(request):
 
             #sql query to search for ride
             try:
-                search = list(Ride.objects.filter(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'o', capacity_remaining__gte = num, shareable = True))
+                search = list(Ride.objects.filter(destination = dest, arrival__gte = start_arr, arrival__lte = end_arr, status = 'o', capacity_remaining__gte = num, shareable = True).exclude(owner=sharer))
             except:
                 search = None
 
