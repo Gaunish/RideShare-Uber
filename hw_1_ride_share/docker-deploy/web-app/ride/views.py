@@ -343,8 +343,10 @@ def confirm_ride(request, ride):
     try:
         this_ride = Ride.objects.get(id = ride)
         driver = User.objects.get(id = request.session['id'])
+        vehicle = Vehicle.objects.get(owner = driver)
         this_ride.driver = driver
         this_ride.status = 'f'
+        this.license_plate = vehicle.license_plate
         this_ride.save()
         
     except:
@@ -521,8 +523,12 @@ def leave_ride(request, ride):
 
     try:
         this_rider = Rider.objects.get(id = ride)
-        this_rider.ride.capacity_remaining = this_ride.ride.capacity_remaining + this_rider.num
+
+        this_rider.ride.capacity_remaining = this_rider.ride.capacity_remaining + this_rider.num
+        this_rider.ride.num_passengers = this_rider.ride.num_passengers - this_rider.num
         this_rider.ride.save()
+
+        this_rider.delete()
     except:
         return redirect('open_rides')
 
