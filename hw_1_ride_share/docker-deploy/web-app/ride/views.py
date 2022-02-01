@@ -314,8 +314,10 @@ def confirm_ride(request, ride):
     try:
         this_ride = Ride.objects.get(id = ride)
         driver = User.objects.get(id = request.session['id'])
+        vehicle = Vehicle.objects.get(owner = driver)
         this_ride.driver = driver
         this_ride.status = 'f'
+        this.license_plate = vehicle.license_plate
         this_ride.save()
         
     except:
